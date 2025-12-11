@@ -192,12 +192,6 @@ class Principal(Tk):
             if not producto:
                 messagebox.showerror("Error", "El código de producto no existe en la base de datos")
                 return
-            c1.execute("SELECT COALESCE(SUM(exi_cantidad), 0) FROM existencias WHERE exi_lote = %s", (lot,))
-            cantidad_actual = c1.fetchone()[0]
-
-            if cantidad_actual + can > 5000:
-                messagebox.showerror("Error", f"El lote '{lot}' "f"No puedes exceder 5000 unidades.")
-                return
             c1.execute("INSERT INTO existencias (exi_lote, exi_cantidad, pro_codigo_k) VALUES (%s, %s, %s)", (lot, can, com))
             c1.execute("select *from vista_productos_existencias")
             self.inventario.delete(*self.inventario.get_children())
@@ -328,4 +322,5 @@ class Principal(Tk):
 
 if __name__ == "__main__":
     app = VentanaBase()
+
     app.mainloop()
