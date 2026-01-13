@@ -2,11 +2,31 @@ from tkinter import *
 from tkinter import ttk
 import time
 
-class VentanaBase(Tk):
+from tkinter import *
+from tkinter import ttk
+import mysql.connector
+from mysql.connector import Error
+from tkinter import messagebox
+from tkinter import simpledialog
+from tkcalendar import DateEntry
+import pandas as pd
+import os
+class CARGA(Tk):
     def __init__(self, titulo="Ventana Base"):
         super().__init__()
+
         self.config(bg="#000000")
-        self.geometry("600x600+400+70")
+        ancho_ventana = 600
+        alto_ventana = 600
+    
+        ancho_pantalla = self.winfo_screenwidth()
+        alto_pantalla = self.winfo_screenheight()
+
+        x = (ancho_pantalla // 2) - (ancho_ventana // 2)
+        y = (alto_pantalla // 2) - (alto_ventana // 2)
+
+        self.geometry(f"{ancho_ventana}x{alto_ventana}+{x}+{y}")
+
         self.overrideredirect(True)
         self.attributes("-topmost", True)
         self.title("StockFlow")
@@ -15,32 +35,29 @@ class VentanaBase(Tk):
         style.theme_use('clam')
         style.configure(
             "Custom.Horizontal.TProgressbar",
-            troughcolor="#000000",      # canal de fondo
+            troughcolor="#000000",
             bordercolor="#000000",
-            background="#FFFFFF",       # color de progreso
+            background="#FFFFFF",
             lightcolor="#000000",
             darkcolor="#000000",
-            thickness=1                 # altura de la barra
+            thickness=1
         )
         self.progress = ttk.Progressbar(
             self,
             orient="horizontal",
-            length=400,
+            length=600,
             mode="determinate",
             maximum=100,
             style="Custom.Horizontal.TProgressbar"
         )
-        
 
-        
+        Label(self, text="📦", font=("Impact", 200), fg="#FFFFFF", bg="#000000").pack(anchor="center", expand=True)
 
-        Label(self, text="📦", font=("Impact", 200), fg="#605F5F", bg="#000000").pack(anchor="center")
-        
-        self.progress.pack(fill="x",anchor="s",expand=True)
-        
+        self.progress.place(y=515)
+
         self.frame = Frame(self, bg="#0F0F0F")
         self.frame.pack(anchor="s", fill="x", side="bottom", expand=True,)
-        
+
         self.label = Label(self.frame, text="StockFlow", font=("Impact", 30), fg="#FFFFFF", bg="#0F0F0F")
         self.label.grid(row=0, column=0, pady=10, padx=10)
 
@@ -48,7 +65,7 @@ class VentanaBase(Tk):
         self.exit.grid(row=0, column=1, padx=300, pady=6)
 
         # Llamar automáticamente a la barra de carga
-        self.after(100, self.barra)
+        self.after(300, self.barra)
 
     def barra(self):
         self.progress["value"] = 0
@@ -77,3 +94,4 @@ class Principal(Tk):
 if __name__ == "__main__":
     app = VentanaBase()
     app.mainloop()
+
